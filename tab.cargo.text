@@ -1,0 +1,13 @@
+Frequencies  
+Data$CARGO  
+Type: Character  
+
+                  Freq   % Valid   % Valid Cum.   % Total   % Total Cum.
+--------------- ------ --------- -------------- --------- --------------
+         Asesor      7     28.00          28.00     28.00          28.00
+      Asistente      6     24.00          52.00     24.00          52.00
+       Empleado      3     12.00          64.00     12.00          64.00
+        Soporte      5     20.00          84.00     20.00          84.00
+        Tecnico      4     16.00         100.00     16.00         100.00
+           <NA>      0                               0.00         100.00
+          Total     25    100.00         100.00    100.00         100.00

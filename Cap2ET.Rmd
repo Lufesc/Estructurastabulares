@@ -1,0 +1,468 @@
+---
+title: "Capítulo 2 Estructuras tabulares"
+subtitle: "Maestría en Estadística Aplicada: Descripción y Exploración de Datos"
+author: 
+- name: "Luis Fernando Escobar"
+  affiliation: "Universidad Autónoma Gabriel René Moreno Business School"
+date: "2024-10-16"
+logo: logo_bsuagrmp.png
+output: 
+  #html_document:
+  prettydoc::html_pretty:
+    toc: true
+    number_sections: true
+    #toc_float: true
+    theme: cayman 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(wooldridge)
+library(PerformanceAnalytics)
+library(tseries)
+library(psych)
+library(tidyverse)
+library(lmtest)
+library(stargazer)
+library(haven)
+
+```
+
+## Introducción
+
+En este capítulo, se dará un paso fundamental en el manejo y organización de datos, el objetivo es **aprender a trabajar con estructuras tabulares en RStudio**. Las tablas no solo son una de las formas más utilizadas para representar datos, sino que también son la base para realizar análisis estadísticos con precisión y claridad. Es así que se pretende ordenar, manipular y explorar la información y bases de datos, para elaborar tablas que puedan marcar la diferencia en presentación de investigaciones, proyectos y estudios.
+
+Desde que se puede tener información secundaria disponible de las encuestas realizadas por las diferentes instituciones (base de datos en SPSS, Stata, Excel), y esto se puede llevar a RStudio en objetos (matrices hasta dataframes). Aquí radica la importancia de como elegir las mejores estructuras según el tipo de análisis que se desea realizar. En tal sentido, en este capítulo se dará las herramientas para transformar base de datos en tablas legibles y eficientes, aplicando las estructuras tabulares de la rigurosidad estadística para ser interpretados y aplicados en el mundo real.
+
+Aquí empieza la oportunidad de llevar el manejo de base de datos al siguiente nivel y dominar una habilidad clave de la estadística aplicada. 
+
+## Recordando elemental   
+
+Antes de empezar con el proceso estructuras tabulares es importante recordar la definición de función y objeto en R, los mismos se pueden definir como lo señala Juan Bosco Mendoza Vega en su libro (<https://bookdown.org/jboscomendoza/r-principiantes4/>):
+
+> **Objetos**: En R, todo es un objeto. Todos los datos y estructuras de datos son objetos. Además, todos los objetos tienen un nombre para identificarlos.
+> La explicación de esto es un tanto compleja y se sale del alcance de este libro. Se relaciona con el **paradigma de programación orientada a objetos** y ese es todo un tema en sí mismo.
+> Lo importante es que recuerdes que al hablar de un objeto, estamos hablando de cualquier cosa que existe en R y que tiene un nombre.  
+- Juan Bosco Mendoza
+
+> Una función es **una serie de operaciones a la que les hemos asignados un nombre**. Las funciones aceptan **argumentos**, es decir, especificaciones sobre cómo deben funcionar.
+> Cuando llamamos una función, se realizan las operaciones que contiene, usando los argumentos que hemos establecido.
+> En R reconocemos a una función usando la notación: `nombre_de_la_función()`. 
+- Juan Bosco Mendoza
+
+Así pues, se puede mencionar a las **funciones** `remove()` y `write.csv()`, que hemos estado aplicando en el curso y que tienen sus **argumentos específicos** para poder funcionar.  Además, entre las **funciones aritméticas y estadísticas** más conocidas se tiene las siguientes:
+
+~~~
+Funciones Matemáticas
+sqrt(x)		    Raíz de x
+exp(x)		    Exponencial de x
+log(x)		    Logaritmo natural de x
+log10(x)	    Logaritmo base 10
+sum(x)		    Suma de los elementos de x
+prod(x)		    Producto de los elementos de x
+sin(x)		    Seno
+cos(x)		    Coseno
+tan(x)		    Tangente
+round(x,n)      Redondea a n dígitos
+cumsum(x)	    Calcula las sumas acumuladas (x1,x1+x2,+x1+…+xn)  
+~~~
+
+~~~
+Funciones Estadísticas
+mean(x)	        Media
+sd(x)           Desviación estándar
+var(x)          Varianza
+median(x)       Mediana
+quantiles(x)    Quantiles
+cor(x,y)        Correlación
+max(x)          Valor máximo
+min(x)          Valor mínimo
+range(x)        Retorna el máximo y mínimo
+sort(x)         Ordena los elementos de x
+summary	        Resumen de las variables
+choose(n,k)	    Combinatoria de n sobre k  
+~~~
+
+## Data frames 
+
+Un Data Frame es una estructura de datos bidimensional similar a una tabla. Es uno de los formatos más utilizados en R para **almacenar y manipular conjuntos de datos**. Cada columna de un Data Frame puede contener un tipo de datos diferente (números, caracteres, factores, etc.), pero todas las columnas deben tener el mismo número de filas. Es ideal para datos organizados en filas y columnas, como en una hoja de cálculo de Excel.
+
+**Características principales de un Data Frame:**
+
+1. **Columnas heterogéneas:** Cada columna puede ser de un tipo diferente (por ejemplo, una columna de números y otra de texto).
+2. **Filas homogéneas:** Todas las filas en general deben tener el mismo número de elementos.
+3. **Nombres de columnas:** Cada columna tiene un nombre, lo que facilita la referencia a cada una de ellas.
+4. **Flexibilidad y utilidad:** Los Data Frames son altamente versátiles para la manipulación, exploración y análisis de datos en R.
+
+**Ejemplo básico de un Data Frame en R:**
+
+```{r }
+# Crear un Data Frame simple
+df <- data.frame(
+  Nombre = c('Juan', 'Pedro', 'Ana', 'Delfina'),
+  Edad = c(21, 46, 58, 27),
+  Ciudad = c("Santa Cruz", "Lima", "Buenos Aires", "Bogotá"),
+  Estado_Civil = c('Soltero', 'Casado', 'Casado', 'Soltero'),
+  Secundaria_Completa = c(TRUE, FALSE, TRUE, TRUE)
+)
+
+# Mostrar el Data Frame
+print(df) # también se puede escribir directamente el nombre del objeto 
+```
+
+En este ejemplo, se tiene un Data Frame con cinco columnas: "Nombre", "Edad",  "Ciudad", "Esatdo Civil" y "Secundaria completa", donde cada fila corresponde a una persona o individuo.
+
+Así también, se tienen funciones para trabajar principalmente con Data Frames:
+
++ `str(df)`: Muestra la estructura del Data Frame, con nombres de columnas, tipos de objetos y elementos de cada variable.
+```{r}
+str(df)
+```
++ `summary(df)`: Resumen estadístico de cada columna (muy útil para la exploración inicial de datos).
+```{r}
+summary(df)
+```
++ `head(df)`: Muestra las primeras filas del Data Frame.
+```{r}
+head(df)
+```
++ `df$columna`: Accede a una columna específica.
+```{r}
+df$Nombre
+```
+
+La creación y manejo de los Data Frames es una herramienta clave para el análisis en R, así pues nos permiten gestionar base de datos de manera eficiente antes de aplicar modelos estadísticos, realizar visualizaciones o ejecutar transformaciones complejas.
+
+## Procesos básicos de trabajo 
+
+Dentro de las estructuras tabulares en estadística se refieren a formas de organizar o agrupar  las bases de datos, es decir, es el método utilizado para organizar y resumir información. Así pues, los datos recolectados se ordenan y clasifican, indicándose la frecuencia (el número de veces que se repiten). Es así, que el mismo nos permite manejar grandes cantidades de información en espacios reducidos, en formas de cuadros o tablas, complementadas con gráficas, similares a las tablas de frecuencias de las hojas de cálculo en Excel.
+
+### Ejemplo de accidentes laborales
+
+Un inspector de seguridad industrial, obtuvo la siguiente información de  las causas principales por las cuales ocurre un accidente grave en una  empresa. Los datos de 40 empresas se muestran a continuación:
+
+Table: Registros de accidentes laborales
+
+D |	O |	S |	M |	D |	O |	S |	D |	O |	S |
+---|---|---|---|---|---|---|---|---|---|
+S |	O |	M |	D |	O |	F |	M |	F |	M |	O |
+M |	D |	S |	D |	S |	S |	D |	S |	D |	O |
+D |	S |	M |	D |	O |	D |	F |	D |	O |	S |
+
+Donde:
+
++ F = Fallas en las máquinas
++ D = Descuido del operario
++ M = Falta de mantenimiento de máquinas
++ S = Falta de material de seguridad
++ O = Mala operación de máquinas
+
+El inspector quiere saber **¿cuáles son las causas más comunes?**, por  orden de importancia, para que ocurra un accidente, con el fin de  elevar un informe y recomendaciones a las empresas en estudio.
+
+#### Solución 
+
+Primeramente, se puede considerar que se tiene un **atributo nominal**: A = Causas principales de accidentes industriales, que existen **5 modalidades o categorías**.
+Luego se tabulan los datos en una distribución de frecuencias de la siguiente manera:
+
+Table: Distribución de frecuencias sobre causas de accidentes industriales 
+
+Atributo | Frecuencia absoluta | Frecuenta relativa |
+---------------|---------------------------|------------------------|
+$$a_{1} = F$$ | $$n_{1} = 3$$ | $$h_{1} = (3/40)*100 = 7.5 \%$$ |
+$$a_{1} = O$$ | $$n_{2} = 9$$ | $$h_{2} = (9/40)*100 = 22.5 \%$$ |
+$$a_{1} = D$$ | $$n_{3} = 12$$ | $$h_{3} = (12/40)*100 = 30.0 \%$$ |
+$$a_{1} = S$$ | $$n_{4} = 10$$ | $$h_{4} = (10/40)*100 = 25.0 \%$$ |
+$$a_{1} = M$$ | $$n_{5} = 6$$ | $$h_{5} = (6/40)*100 = 15.0 \%$$ |
+$$Total$$    | $$n = \Sigma n_{i} = 40$$ | $$\Sigma h_{i} = 100.0 \%$$ |
+
+Por otra parte, para realizar la distribución de frecuencias sobre causas de accidentes industriales en RStudio se lo tiene que hacer de la siguiente manera:
+
+1. Creación del objeto o variable de estudio
+
+```{r}
+# Crear el objeto de la varieble accidentes
+Accidentes<-c("D", "O", "S", "M", "D", "O", "S", "D", "O", "S", "S", "O", "M", "D", "O", "F", "M", "F", "M", "O", "M", "D", "S", "D", "S", "S", "D", "S", "D", "O", "D", "S", "M", "D", "O", "D", "F", "D", "O", "S")
+```
+
+Aquí se está creando un **vector llamado Accidentes**, que contiene una serie de valores categóricos, **cada valor es una letra** que representan diferentes categorías de accidentes. Estas letras son:
+
++ "D": representa "Descuido del operario"
++ "O": representa "Mala operación de máquinas" 
++ "S": representa "Falta de material de seguridad" 
++ "M": representa "Falta de mantenimiento de máquinas" 
++ "F": representa "Fallas en las máquinas" 
+
+Además el vector contiene 40 elementos en total.
+
+Donde la función `c()` en R se usa para **combinar elementos y formar un vector**. En este caso, se combinan las letras dentro del vector Accidentes.
+
+```{r}
+# Revisando los elementos de la variable
+Accidentes
+```
+
+Al **ejecutar o correr el nombre del objeto directamente**, la consola muestra el contenido del vector `Accidentes`. Es decir, simplemente está imprimiendo el vector que se acaba de crear.
+
+```{r}
+# Revisando la clase o tipo de objeto 
+class(Accidentes)
+```
+
+La función `class()` nos dice la clase del objeto `Accidentes`, es decir, el tipo de variable que se almacena en el objeto. En este caso, `Accidentes` es un vector de caracteres, esto significa que el vector está formado por **elementos de tipo carácter (strings o letras)**.
+
+2. Tabla de frecuencia absoluta
+```{r}
+# Agrupación de los registros en frecuenta absoluta de los accidentes 
+table(Accidentes)
+```
+
+La función `table()` nos genera una **tabla de frecuencias** de los valores en el vector `Accidentes`. Es decir, cuenta cuántas veces aparece cada uno de los elementos únicos en el vector. El resultado nos dice que:
+
++ La letra "D" aparece 12 veces.
++ La letra "F" aparece 3 veces.
++ La letra "M" aparece 6 veces.
++ La letra "O" aparece 9 veces.
++ La letra "S" aparece 10 veces.
+
+3. Tabla de frecuencia relativa (porcentajes)
+
+```{r}
+# Agrupación de los registros en frecuenta relativa de los accidentes 
+prop.table(table(Accidentes))*100
+```
+
+Al utilizar la función `prop.table()` para calcular las **frecuencias relativas o proporciones** de cada categoría en el vector `Accidentes`. Esta función convierte la tabla de frecuencias en proporciones, es decir, divide el valor de cada categoría entre el total de observaciones. Luego, multiplicas por 100 para obtener los valores en porcentaje.
+
+El resultado nos indica que:
+
++ El 30% de los valores en el vector son `D = Descuido del operario`
++ El 7.5% de los valores son `F = Fallas en las máquinas`
++ El 15% de los valores son `M = Falta de mantenimiento de máquinas`
++ El 22.5% de los valores son `O = Mala operación de máquinas`
++ El 25% de los valores son `S = Falta de material de seguridad`
+
+#### Solución alternativa
+
+En este tipo de análisis es útil cuando quieres conocer la distribución de una variable categórica, como es el número de tipos de accidentes en diferentes empresas. Se tiene que presentar la tabla de frecuencia absoluta y relativa. Así pues, se puede realizar directamente de la siguiente manera:
+
+```{r}
+# Creando tabla de frecuencia relativas y acumuladas
+tabla_freq <- 
+  transform(table(Accidentes), Freq_rel=prop.table(Freq)*100, 
+            Freq_acum=cumsum(Freq), Freq_acum_rel=cumsum(prop.table(Freq))*100)
+
+# Mostrar la tabla creada
+print(tabla_freq)
+```
+
+Primeramente, se puede aclarar que la función `table(Accidentes)` genera una tabla de frecuencias absolutas del vector `Accidentes`, es decir, que cuenta cuántas veces aparece cada categoría o valor en la variable Accidentes.
+
+No obstante, para crear la tabla se utiliza la función `transform()`, la misma que permite modificar o agregar columnas a un *objeto que tenga estructura tabular*, como la tabla de frecuencias que ha creado con `table()`. En particular, se esta añadiendo tres nuevas columnas:
+
++ `Freq_rel=prop.table(Freq)*100`: Esta columna calcula las *frecuencias relativas* en porcentaje. `prop.table(Freq)` divide la frecuencia de cada categoría entre el total de observaciones, y al multiplicar por 100, obtienes el valor en porcentaje.
++ `Freq_acum=cumsum(Freq)`: Esta columna genera la *frecuencia acumulada*. La función `cumsum()` calcula la suma acumulativa de las frecuencias, es decir, suma las frecuencias de las categorías una a una, proporcionando una idea de cuántas observaciones se han acumulado hasta cada categoría.
++ `Freq_acum_rel=cumsum(prop.table(Freq))*100`: Esta columna genera la *frecuencia relativa acumulada* en porcentaje. De manera similar a Freq_acum, pero en términos relativos (porcentajes). Aquí se usa `cumsum()` para calcular la suma acumulativa de las proporciones relativas (las proporciones calculadas con `prop.table(Freq)`).
+
+Finalmente, se emplea la función `print(tabla_freq)` que simplemente imprime el resultado del objeto creado `tabla_freq`, mostrando la tabla de frecuencias que ahora incluye las columnas adicionales de frecuencia relativa, frecuencia acumulada, y frecuencia acumulada relativa.
+
+#### Representación grafica
+
+```{r}
+# Gráfico de barras de las frecuencias absolutas
+barplot(table(Accidentes),
+        ylim = c(0, 15),
+        xlab = "Accidentes industriales", ylab = "Frecuencia absoluta", 
+        col = c("red", "blue", "green", "yellow", "grey"),
+        main = "Diagrama de barras de frecuencias absolutas\n sobre causas de \"accidentes industriales\"")
+legend(x = "top", # Posición 
+       legend = c("Descuido del operario", "Fallas en las máquinas", "Falta de mantenimiento de máquinas", "Mala operación de máquinas", "Falta de material de seguridad"), # Textos de la leyenda
+       bty = "n", # Elimina la caja
+       cex = 0.8, # Tamaño de las letras de la leyenda
+       fill = c("red", "blue", "green", "yellow", "grey"), # Colores
+       ) 
+```
+
+La función `barplot()`crea un diagrama de barras que muestra las frecuencias absolutas de los elementos del vector `Accidentes`. El mismo nos da una idea visual de la distribución de las categorías de la variable. Cabe mencionar, que se utiliza la función `table(Accidentes)` para crear la tabla de frecuencias absolutas, ya que la variable no está definido como objeto `factor`.
+
+```{r}
+# Gráfico de barras de las frecuencias relativas
+barplot(prop.table(table(Accidentes)),
+        xlab = "Accidentes industriales", ylab = "Frecuencia relativa", 
+        col = c("red", "blue", "green", "yellow", "grey"),
+        main = "Diagrama de barras de frecuencias relativas\n sobre causas de \"accidentes industriales\"")
+legend(x = "top", # Posición 
+       legend = c("Descuido del operario", "Fallas en las máquinas", "Falta de mantenimiento de máquinas", "Mala operación de máquinas", "Falta de material de seguridad"), # Textos de la leyenda
+       bty = "n", # Elimina la caja
+       cex = 0.8, # Tamaño de las letras de la leyenda
+       fill = c("red", "blue", "green", "yellow", "grey"), # Colores
+       ) 
+```
+
+En este gráfico se puede apreciar una representación visual de las proporciones relativas de cada categoría de los accidentes industriales, lo que te permite visualizar la proporción de cada categoría en lugar de la frecuencia absoluta.
+
+En suma, se puede recomendar que **las empresas  procuren que sus operarios tengan todas las comodidades y motivaciones para no descuidarse en su trabajo**, les provean de  todos los materiales necesarios para su seguridad y realicen capacitaciones constantes sobre operación de máquinas.
+
+### Ejemplo mediante la importación de datos
+
+#### Datos de recursos humanos
+
+Mediante la base de datos ficticia del departamento de recursos humanos, se pretende realizar un análisis de estructuras tabulares y gráficos respectivo al tipo de variable que corresponde. En tal sentido, lo primero que vamos hacer es la importanción de datos al ambiente global de RStudio.
+
+```{r}
+# Importar y crear el data frame 
+Data <- read.csv("C:/Users/lescobar/Documents/Capitulo2ET/Data.csv")
+head(Data)
+attach(Data) #permite llamar directamente con el nombre a las variables de Data 
+names(Data) #muestra nos nombres del data frame
+```
+
+##### Variable cualitativa nominal 
+
+```{r}
+# Crear la tabla de frecuencias 
+tabla_freq_cargo <- 
+  transform(table(CARGO), Freq_rel=prop.table(Freq)*100, 
+            Freq_acum=cumsum(Freq), Freq_rel_acum=cumsum(prop.table(Freq)*100))
+```
+
+```{r , echo=FALSE}
+# Mostrar la tabla de distribución 
+knitr::kable(
+  print(tabla_freq_cargo), 
+  caption = "Distribución de frecuencias de los cargos"
+)
+```
+
+```{r}
+# Almacenar en el directorio de trabajo la tabla de frecuencia 
+sink("descrip_tab_cargo.text")
+print(tabla_freq_cargo)
+sink()
+```
+
+```{r}
+# Gráfico de barras 
+barplot(table(CARGO))
+# Gráfico de pastel o torta 
+pie(table(CARGO))
+```
+
+##### Variable cuantitativa discreta
+
+```{r}
+# Crear la tabla de frecuencias
+table(HIJOS)
+tabla_freq2 <- 
+  transform(table(HIJOS), Freq_rel=prop.table(Freq)*100, 
+            Freq_acum=cumsum(Freq), Freq_rel_acum=cumsum(prop.table(Freq)*100))
+
+# Mostrar la tabla de distribución
+print(tabla_freq2)
+
+# Gráfico de barras 
+barplot(table(HIJOS))
+```
+
+##### Variable cuantitativa continúa  
+
+```{r}
+# Crear la tabla de frecuencias
+table(SUELDO)
+range(SUELDO) #determina el máximo y mínimo dentro de la variable
+
+#Creamos una lista de límites de clase
+límites <- seq(1000,3500,by=500)
+
+#Agrupamos la data en los límites de clase
+frecuencia_sueldos <- cut(Data$SUELDO, límites, dig.lab = 4)
+
+# Crear la tabla agrupada de frecuencias 
+tabla_freq_sueldos <- 
+  transform(table(frecuencia_sueldos), Freq_rel=prop.table(Freq)*100, 
+            Freq_acum=cumsum(Freq), Freq_rel_acum=cumsum(prop.table(Freq)*100))
+
+# Mostrar la tabla de distribución
+print(tabla_freq_sueldos)
+
+# Almacenar en el directorio de trabajo la tabla agrupada
+sink("descrip_tab_sueldo.text")
+print(tabla_freq_sueldos)
+sink()
+
+# Histograma de la variable
+hist(SUELDO)
+hist(SUELDO,  col="blue",  5, xlab  =  "Sueldo",  ylab  =  "Frecuencia", main=  "Histograma del sueldo de los trabajadores")
+
+# Almacenar en el directorio de trabajo la gráfica 
+jpeg("histogramas_sueldos.jpg")
+hist(SUELDO,  col="blue",  5, xlab  =  "Sueldo",  ylab  =  "Frecuencia", main=  "Histograma del sueldo de los trabajadores")
+graphics.off()
+
+```
+
+## Empleando paquetería *summarytools*
+
+```{r , eval=FALSE}
+# Instalar el paquete, si lo tiene instalado no es necesario volver a instalar
+install.packages("summarytools")
+```
+
+```{r}
+# Habilitar el paquete
+library(summarytools) 
+
+# Crear la tabla de frecuencia
+tab.cargo <- freq(Data$CARGO)
+tab.cargo
+
+# Crear la tabla de frecuencia
+tab.hijos <- freq(Data$HIJOS)
+tab.hijos
+
+# Crear la tabla de frecuencia
+tab.sueldo <- freq(Data$SUELDO)
+tab.sueldo
+```
+
+```{r}
+# Almacenar en el directorio de trabajo la tabla 1
+write.csv(tab.cargo,"output.csv")
+
+# Almacenar en el directorio de trabajo la tabla 2
+sink("tab.cargo.text")
+print(tab.cargo)
+sink()
+```
+
+### Aplicando a respuesta binaria
+
+```{r}
+# Creando la variable con respuesta binaria
+sexo=factor(c("F","M","F","F","F","M","M","F","F","F","F","F","M","M","M","F","M","M","F","F","F","F","F","M"))
+```
+
+```{r}
+# Tabla de frecuencia 
+tab.sexo <- freq(sexo)
+tab.sexo
+```
+
+```{r}
+# Generamos tabla y gráfico
+table(sexo)
+pie(table(sexo), 
+    main="Distribución por género", # título
+    col=c("red","blue"), # damos color a los sectores
+    labels=c("Mujer", "Hombre"))
+```
+
+```{r}
+# otra representación en tantos por ciento
+piepercent <- round(prop.table(table(sexo))*100,2)
+pie(table(sexo), 
+    main="Distribución por género", # título
+    col=c("red","blue"), # damos color a los sectores
+    labels=piepercent)
+legend("topright", c("Mujer", "Hombre"), cex=0.8, fill=c(2,4)) # añadimos la leyenda al gráfico
+```

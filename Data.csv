@@ -1,0 +1,26 @@
+CODIGO,NOMBRE,CARGO,CATEGORIA,HIJOS,SUELDO
+97CC0001,"Olivares A., José",Soporte,C,2,1200
+97CC0002,"Apari Ch., Herles",Asesor,C,4,3000
+97CC0003,"Quispe R., Cesar",Asistente,D,1,1600
+97CC0004,Palacios M. Victor,Soporte,D,0,1800
+97CC0005,"Encalada D., Manuel",Tecnico,A,4,2500
+97CC0006,Rivera S. Juan,Asesor,A,7,3500
+97CC0007,Mori M. Juan,Asesor,A,6,1600
+97CC0008,"Salas Z., Martín",Asesor,C,5,1900
+97CC0009,Vera R. Marcos,Asistente,C,9,2500
+97CC0010,Mujica T. Ruben,Soporte,B,8,1800
+97CC0011,Cardenas R. Nelson,Asistente,B,2,2000
+97CC0012,Solis A. Carlos,Tecnico,B,1,2400
+97CC0013,Descalzi C. Luis,Tecnico,A,5,2500
+97CC0014,Torres V. Rene,Asesor,A,4,2600
+97CC0015,Arévalo S. Fernando,Tecnico,B,7,2700
+97CC0016,Matta Z. Pedro,Asistente,B,6,2400
+97CC0017,Oviedo C. Pablo,Soporte,A,0,1600
+97CC0018,Ramos D. Santos,Asistente,C,3,1800
+97CC0019,Pereda F. Martín,Asesor,D,4,1400
+97CC0020,Gonzales S. Rubén,Empleado,D,4,1650
+97CC0021,Matias D. Sandro,Empleado,D,2,1700
+97CC0022,Ramirez R. Andrés,Empleado,C,2,1900
+97CC0023,Castillo J. Manuel,Asesor,C,5,1850
+97CC0024,Quispe H. Carlos,Asistente,C,5,1680
+97CC0025,Gomez G. Cesar,Soporte,A,0,1570

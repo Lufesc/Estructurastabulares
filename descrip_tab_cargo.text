@@ -1,0 +1,6 @@
+      CARGO Freq Freq_rel Freq_acum Freq_rel_acum
+1    Asesor    7       28         7            28
+2 Asistente    6       24        13            52
+3  Empleado    3       12        16            64
+4   Soporte    5       20        21            84
+5   Tecnico    4       16        25           100
